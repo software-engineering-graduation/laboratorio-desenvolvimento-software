@@ -7,36 +7,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-@Entity
-public class Task {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     private String description;
-    private Boolean status;
-
-    public UUID getUuid() {
-        return this.uuid;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public Boolean getStatus() {
-        return this.status;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
+    private Boolean completed;
 }
