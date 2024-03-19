@@ -11,8 +11,8 @@
 	<groupId>com.labssoft</groupId>
 	<artifactId>roteiro01</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>roteiro01</name>
-	<description>Demo project for Spring Boot</description>
+	<name>TO DO List</name>
+	<description>PUC Minas - Laboratório de Desenvolvimento de Software</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
@@ -36,7 +36,20 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<version>2.2.224</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>annotationProcessor</scope>
 		</dependency>
 	</dependencies>
 
