@@ -11,30 +11,36 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.NonNull;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @Schema(description = "Todos os detalhes sobre uma tarefa. ")
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Builder
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Size(max = 100, min = 1, message = "Título da tarefa deve possuir no máximo 100 caracteres")
-    private String title;
-    @Size(max = 5000, message = "Descrição da tarefa deve possuir no máximo 100 caracteres")
-    private String description;
-    @Enumerated(EnumType.ORDINAL)
-    private TaskStatus status;
 
-    public Task(String title, String description){
-        this.title = title;
-        this.description = description;
-        this.status = TaskStatus.InProgress;
-    }
+    @Size(max = 100, min = 1, message = "Título da tarefa deve possuir pelo menos 1 caractere e no máximo 100 caracteres")
+    @NonNull
+    private String title;
+
+    @Size(max = 5000, message = "Descrição da tarefa deve possuir no máximo 5000 caracteres")
+    @NonNull
+    private String description;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Builder.Default private TaskStatus status = TaskStatus.InProgress;
 
     @Override
     public String toString() {
