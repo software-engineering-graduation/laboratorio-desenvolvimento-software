@@ -36,8 +36,7 @@ public class Task {
     private String title;
 
     @Size(max = 5000, message = "Descrição da tarefa deve possuir no máximo 5000 caracteres")
-    @NonNull
-    private String description;
+    @Builder.Default private String description = "";
 
     @Enumerated(EnumType.ORDINAL)
     @Builder.Default private TaskStatus status = TaskStatus.InProgress;
@@ -45,5 +44,11 @@ public class Task {
     @Override
     public String toString() {
         return "Task [id=" + this.id + ", title=" + this.title + ", description=" + this.description + ", status=" + this.status + "]";
+    }
+
+    public Task(String title, String description) {
+        this.title = title;
+        this.description = description;
+        this.status = TaskStatus.InProgress;
     }
 }
