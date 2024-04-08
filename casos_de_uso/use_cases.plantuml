@@ -1,0 +1,22 @@
+@startuml
+title Todo List Diagrama de Casos de Uso v1.0
+
+left to right direction
+actor "Usuário" as actor
+
+rectangle "TODO List"{
+    usecase "Listar tarefas" as Listar
+    usecase "Criar tarefa" as Criar
+    usecase "Concluir tarefa" as Concluir
+    usecase "Editar tarefa" as Editar
+    usecase "Deletar tarefa" as Deletar
+}
+
+actor -- Listar
+actor -- Criar
+
+Listar <-- Concluir : <<extend>>
+Listar <-- Editar : <<extend>>
+Listar <-- Deletar : <<extend>>
+
+@enduml
