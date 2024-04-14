@@ -3,7 +3,6 @@ package com.labssoft.roteiro01.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
