@@ -2,6 +2,8 @@ package com.labssoft.roteiro01.entity;
 
 import java.util.Date;
 import java.lang.StringBuilder;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.labssoft.roteiro01.enums.TaskPriority;
 import com.labssoft.roteiro01.enums.TaskStatus;
 import com.labssoft.roteiro01.enums.TaskType;
@@ -50,6 +52,7 @@ public class Task {
     private TaskType type;
 
     @Nullable
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date dueDate;
 
     @Nullable
@@ -57,21 +60,6 @@ public class Task {
 
     @Enumerated(EnumType.ORDINAL)
     private TaskPriority priority;
-
-    @Override
-    public String toString() {
-        return new StringBuilder()
-        .append("Task [id=").append(id)
-        .append(", title=").append(title)
-        .append(", description=").append(description)
-        .append(", status=").append(status)
-        .append(", type=").append(type)
-        .append(", dueDate=").append(dueDate)
-        .append(", dueDays=").append(dueDays)
-        .append(", priority=").append(priority)
-        .append("]")
-        .toString();
-    }
 
     public Task(String title, String description) {
         this.title = title;
@@ -105,5 +93,30 @@ public class Task {
         this.dueDays = dueDays;
         this.priority = priority;
         this.status = TaskStatus.InProgress;
+    }
+
+    public Task(String title, String description, TaskStatus status, TaskType type, Date dueDate, Integer dueDays, TaskPriority priority) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.type = type;
+        this.dueDate = dueDate;
+        this.dueDays = dueDays;
+        this.priority = priority;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+        .append("Task [id=").append(id)
+        .append(", title=").append(title)
+        .append(", description=").append(description)
+        .append(", status=").append(status)
+        .append(", type=").append(type)
+        .append(", dueDate=").append(dueDate)
+        .append(", dueDays=").append(dueDays)
+        .append(", priority=").append(priority)
+        .append("]")
+        .toString();
     }
 }

@@ -3,6 +3,7 @@ package com.labssoft.roteiro01.controller;
 import com.labssoft.roteiro01.entity.Task;
 import com.labssoft.roteiro01.entity.dto.CreateTask;
 import com.labssoft.roteiro01.entity.dto.UpdateTask;
+import com.labssoft.roteiro01.exceptions.InvalidFieldFormatException;
 import com.labssoft.roteiro01.service.TaskService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +54,7 @@ public class TaskController {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     public ResponseEntity<Task> create(
-            @RequestBody(description = "Objeto tarefa que será criado.", required = true, content = @Content(schema = @Schema(implementation = CreateTask.class))) @Valid @org.springframework.web.bind.annotation.RequestBody CreateTask task) {
+            @RequestBody(description = "Objeto tarefa que será criado.", required = true, content = @Content(schema = @Schema(implementation = CreateTask.class))) @Valid @org.springframework.web.bind.annotation.RequestBody CreateTask task) throws InvalidFieldFormatException {
         Task newTask = taskService.create(task);
         return new ResponseEntity<>(newTask, HttpStatus.CREATED);
     }
