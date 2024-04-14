@@ -1,8 +1,13 @@
 package com.labssoft.roteiro01.entity;
 
+import java.util.Date;
+import java.lang.StringBuilder;
+import com.labssoft.roteiro01.enums.TaskPriority;
 import com.labssoft.roteiro01.enums.TaskStatus;
+import com.labssoft.roteiro01.enums.TaskType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -41,14 +46,64 @@ public class Task {
     @Enumerated(EnumType.ORDINAL)
     @Builder.Default private TaskStatus status = TaskStatus.InProgress;
 
+    @Enumerated(EnumType.ORDINAL)
+    private TaskType type;
+
+    @Nullable
+    private Date dueDate;
+
+    @Nullable
+    private Integer dueDays;
+
+    @Enumerated(EnumType.ORDINAL)
+    private TaskPriority priority;
+
     @Override
     public String toString() {
-        return "Task [id=" + this.id + ", title=" + this.title + ", description=" + this.description + ", status=" + this.status + "]";
+        return new StringBuilder()
+        .append("Task [id=").append(id)
+        .append(", title=").append(title)
+        .append(", description=").append(description)
+        .append(", status=").append(status)
+        .append(", type=").append(type)
+        .append(", dueDate=").append(dueDate)
+        .append(", dueDays=").append(dueDays)
+        .append(", priority=").append(priority)
+        .append("]")
+        .toString();
     }
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
+        this.status = TaskStatus.InProgress;
+        this.type = TaskType.Free;
+        this.priority = TaskPriority.Low;
+    }
+
+    public Task(String title, String description, TaskPriority priority) {
+        this.title = title;
+        this.description = description;
+        this.status = TaskStatus.InProgress;
+        this.priority = priority;
+        this.type = TaskType.Free;
+    }
+
+    public Task(String title, String description, TaskType type, Date dueDate, TaskPriority priority) {
+        this.title = title;
+        this.description = description;
+        this.type = type;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.status = TaskStatus.InProgress;
+    }
+
+    public Task(String title, String description, TaskType type, Integer dueDays, TaskPriority priority) {
+        this.title = title;
+        this.description = description;
+        this.type = type;
+        this.dueDays = dueDays;
+        this.priority = priority;
         this.status = TaskStatus.InProgress;
     }
 }

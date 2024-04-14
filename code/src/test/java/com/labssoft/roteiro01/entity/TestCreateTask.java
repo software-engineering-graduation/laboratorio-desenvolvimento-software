@@ -3,6 +3,7 @@ package com.labssoft.roteiro01.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,7 +12,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.github.javafaker.Faker;
+import com.labssoft.roteiro01.enums.TaskPriority;
 import com.labssoft.roteiro01.enums.TaskStatus;
+import com.labssoft.roteiro01.enums.TaskType;
 
 @SpringBootTest
 public class TestCreateTask {
@@ -23,6 +26,10 @@ public class TestCreateTask {
             new Faker(Locale.US).lorem().characters(5000)
             );
         assertEquals(TaskStatus.InProgress, task.getStatus());
+        assertEquals(TaskType.Free, task.getType());
+        assertEquals(TaskPriority.Low, task.getPriority());
+        assertEquals(null, task.getDueDate());
+        assertEquals(null, task.getDueDays());
     }
 
     @ParameterizedTest

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.labssoft.roteiro01.entity.CreateTask;
+import com.labssoft.roteiro01.entity.dto.CreateTask;
 import com.labssoft.roteiro01.entity.Task;
-import com.labssoft.roteiro01.entity.UpdateTask;
+import com.labssoft.roteiro01.entity.dto.UpdateTask;
 import com.labssoft.roteiro01.enums.TaskStatus;
 import com.labssoft.roteiro01.repository.TaskRepository;
 
