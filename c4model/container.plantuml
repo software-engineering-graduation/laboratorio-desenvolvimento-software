@@ -1,0 +1,17 @@
+@startuml container_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+
+!include DEVICONS/java.puml
+
+Person(user, "Usuário", "Usuário da TODO list que gerencia tarefas")
+
+System_Boundary(boundary, "TODO list"){
+    Container(api, "REST API", "Java 18, Spring MVC", "", "java")
+    ContainerDb(rel_db, "Banco de dados Relacional", "H2")
+}
+
+Rel(user, api, "Cria, vizualiza, edita, finaliza e deleta suas tarefas", "HTTPS:8080")
+Rel(api, rel_db, "Reads from and writes to", "SQL/TCP:3306")
+
+@enduml

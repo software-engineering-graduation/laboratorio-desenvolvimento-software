@@ -1,0 +1,27 @@
+@startuml component_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Componentes To-Do List
+
+Container(client, "Cliente HTTP", " ", "Permite aos usuários acessar o sistema de gerenciamento de tarefas.")
+ContainerDb(db, "Database", "H2", "Armazena os dados das tarefas (título, descrição, status, etc.)")
+
+Container_Boundary(api, "Aplicação de API") {
+    Component(tas_controller, "Controller de Tarefas", "Controller MVC Rest", "Gerencia solicitações e respostas HTTP para o gerenciamento de tarefas.")
+    Component(task_service, "Service de Tarefas", " ", "Lógica de negócios para operações CRUD e gerenciamento de tarefas.")
+    Component(task_repository, "Repository de Tarefas", " ", "Fornece operações de persistência para tarefas no banco de dados.")
+    Component(dto_mapper, "Mapper DTO", " ", "Mapeia entre entidades de Tarefa e DTOs para transferência de dados.")
+    Component(date_util, "Util de Data", " ", "Fornece funcionalidades para cálculos de data e lógica de prazos.")
+    Component(exception_handler, "Custom Exceptions", " ", "Manipula exceções e fornece respostas de erro informativas.")
+    
+    Rel(tas_controller, task_service, "Uses")
+    Rel(task_service, task_repository, "Uses")
+    Rel(task_service, dto_mapper, "Uses")
+    Rel(task_service, date_util, "Uses")
+    Rel(task_service, exception_handler, "Uses")
+}
+
+Rel(task_repository, db, "Read/Write", "SQL/TCP")
+Rel(client, tas_controller, "Uses", "JSON/HTTPS")
+
+@enduml

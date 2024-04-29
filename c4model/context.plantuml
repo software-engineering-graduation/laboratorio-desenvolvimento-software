@@ -1,0 +1,7 @@
+@startuml context_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Usuário", "Usuário da TODO list que gerencia tarefas")
+System(todo, "TO-DO", "Permite a usuários gerenciar tarefas")
+Rel(user, todo, "Cria, finaliza, define prazos e deleta tarefas")
+@enduml
