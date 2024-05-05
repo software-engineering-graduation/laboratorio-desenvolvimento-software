@@ -1,17 +1,23 @@
-FROM ubuntu:latest as build
+FROM openjdk:19-alpine
+WORKDIR /app
+COPY . /app
+RUN chmod +x mvnw
 
-RUN apt-get update
-RUN apt-get install openjdk-21-jdk -y
-COPY . .
+# Define build arguments
+ARG SPRING_DATASOURCE_USERNAME
+ARG SPRING_DATASOURCE_PASSWORD
+ARG SPRING_DATASOURCE_HOSTNAME
+ARG SPRING_DATASOURCE_DBNAME
+ARG SPRING_PROFILES_ACTIVE
 
-RUN apt-get install maven -y
-RUN mvn clean install
+# Set environment variables inside the container
+ENV SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+ENV SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+ENV SPRING_DATASOURCE_HOSTNAME=${SPRING_DATASOURCE_HOSTNAME}
+ENV SPRING_DATASOURCE_DBNAME=${SPRING_DATASOURCE_DBNAME}
+ENV SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
 
-FROM openjdk:21-jdk-slim
-
+RUN ./mvnw -B -DskipTests clean package
+RUN apk --no-cache add findutils
 EXPOSE 8080
-
-RUN ls .
-COPY --from=build target/todo-list-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT [ "java", "-jar", "-Dspring.profiles.active=$SPRING_PROFILES_ACTIVE", "app.jar" ]
+CMD ["/bin/sh", "-c", "export $(cat .env | xargs) && java -jar -Dspring.profiles.active=$SPRING_PROFILES_ACTIVE target/todo-list-0.0.1-SNAPSHOT.jar"]
