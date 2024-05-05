@@ -9,12 +9,12 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.labssoft</groupId>
-	<artifactId>roteiro01</artifactId>
+	<artifactId>todo-list</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>TO DO List</name>
+	<name>todo-list</name>
 	<description>PUC Minas - Laboratório de Desenvolvimento de Software</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>19</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
