@@ -1,6 +1,5 @@
 package com.labssoft.roteiro01.controller;
 
-import com.labssoft.roteiro01.entity.Task;
 import com.labssoft.roteiro01.entity.dto.CreateTask;
 import com.labssoft.roteiro01.entity.dto.ReadTask;
 import com.labssoft.roteiro01.entity.dto.UpdateTask;
