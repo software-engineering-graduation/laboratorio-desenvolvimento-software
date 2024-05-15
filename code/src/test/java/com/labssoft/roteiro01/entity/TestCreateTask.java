@@ -16,7 +16,7 @@ import com.labssoft.roteiro01.enums.TaskStatus;
 import com.labssoft.roteiro01.enums.TaskType;
 
 @SpringBootTest
-public class TestCreateTask {
+class TestCreateTask {
 
     @Test
     void should_create_new_task_with_default_status_in_progress(){
