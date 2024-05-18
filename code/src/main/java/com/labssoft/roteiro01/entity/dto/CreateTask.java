@@ -2,8 +2,6 @@ package com.labssoft.roteiro01.entity.dto;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.labssoft.roteiro01.enums.TaskPriority;
 import com.labssoft.roteiro01.enums.TaskType;

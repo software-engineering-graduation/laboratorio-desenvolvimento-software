@@ -42,4 +42,7 @@ public class UpdateTask{
         example = "Completed"
     )
     private TaskStatus status;
+
+    @Schema(description = "Prioridade da tarefa. ", example = "High")
+    private TaskPriority priority;
 }
