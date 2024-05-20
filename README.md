@@ -6,6 +6,7 @@
 - [prototipos](prototipos/README.md) - Interface prototypes
 
 
-## API v.0.0.1
+## API v.0.0.2
 
-- [Checkout API](https://todo-list-dw2r.onrender.com/api/)
+- [Checkout API on Render](https://todo-list-dw2r.onrender.com/api/)
+- [API Docker image](https://hub.docker.com/repository/docker/zezit/todo-list/general)
