@@ -4,3 +4,9 @@
 - [casos_de_uso](casos_de_uso/README.md) - Use cases diagrams
 - [code](code/README.md) - Java code
 - [prototipos](prototipos/README.md) - Interface prototypes
+
+
+## API v.0.0.2
+
+- [Checkout API on Render](https://todo-list-dw2r.onrender.com/api/)
+- [API Docker image](https://hub.docker.com/repository/docker/zezit/todo-list/general)

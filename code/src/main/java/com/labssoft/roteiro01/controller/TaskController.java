@@ -1,6 +1,5 @@
 package com.labssoft.roteiro01.controller;
 
-import com.labssoft.roteiro01.entity.Task;
 import com.labssoft.roteiro01.entity.dto.CreateTask;
 import com.labssoft.roteiro01.entity.dto.ReadTask;
 import com.labssoft.roteiro01.entity.dto.UpdateTask;
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,21 @@ public class TaskController {
         if (tasks.iterator().hasNext()) {
             return new ResponseEntity<>(tasks, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/task/{id}")
+    @Operation(summary = "Busca uma tarefa pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tarefa encontrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Tarefa não encontrada"),
+    })
+    public ResponseEntity<ReadTask> findById(@PathVariable("id") Long id) {
+        ReadTask task = taskService.findById(id);
+        if (task != null) {
+            return new ResponseEntity<>(task, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/task")
@@ -55,7 +70,8 @@ public class TaskController {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     })
     public ResponseEntity<ReadTask> create(
-            @RequestBody(description = "Objeto tarefa que será criado.", required = true, content = @Content(schema = @Schema(implementation = CreateTask.class))) @Valid @org.springframework.web.bind.annotation.RequestBody CreateTask task) throws InvalidFieldFormatException {
+            @RequestBody(description = "Objeto tarefa que será criado.", required = true, content = @Content(schema = @Schema(implementation = CreateTask.class))) @Valid @org.springframework.web.bind.annotation.RequestBody CreateTask task)
+            throws InvalidFieldFormatException {
         ReadTask newTask = taskService.create(task);
         return new ResponseEntity<>(newTask, HttpStatus.CREATED);
     }
@@ -97,7 +113,7 @@ public class TaskController {
     public ResponseEntity<ReadTask> edit(
             @Valid @RequestBody(description = "Objeto com os novos dados.", required = true, content = @Content(schema = @Schema(implementation = UpdateTask.class))) @org.springframework.web.bind.annotation.RequestBody UpdateTask task,
             @PathVariable("id") Long id) {
-                ReadTask updatedTask = taskService.edit(id, task);
+        ReadTask updatedTask = taskService.edit(id, task);
         if (updatedTask != null) {
             return new ResponseEntity<>(updatedTask, HttpStatus.OK);
         }

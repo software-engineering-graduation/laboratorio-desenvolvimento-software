@@ -14,7 +14,6 @@ import com.labssoft.roteiro01.util.DateCompare;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -101,8 +100,14 @@ public class TaskService {
             task.setTitle(updatedTask.getTitle());
             task.setDescription(updatedTask.getDescription());
             task.setStatus(updatedTask.getStatus());
+            task.setPriority(updatedTask.getPriority());
             return TaskReadMapper.mapToReadTask(taskRepository.save(task));
         }
         return null;
+    }
+
+    public ReadTask findById(Long id) {
+        Optional<Task> optionalTask = taskRepository.findById(id);
+        return optionalTask.map(TaskReadMapper::mapToReadTask).orElse(null);
     }
 }

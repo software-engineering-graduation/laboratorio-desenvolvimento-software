@@ -14,6 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ReadTask {
+    private Long id;
     private String title;
     private String description;
     private TaskType type;

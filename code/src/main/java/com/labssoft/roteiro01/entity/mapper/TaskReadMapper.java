@@ -13,6 +13,7 @@ import com.labssoft.roteiro01.util.DateCompare;
 public class TaskReadMapper {
     public static ReadTask mapToReadTask(Task task) {
         return new ReadTask(
+                task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getType(),
