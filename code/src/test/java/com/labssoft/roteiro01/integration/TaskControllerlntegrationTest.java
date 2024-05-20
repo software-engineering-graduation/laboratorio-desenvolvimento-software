@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -27,6 +29,7 @@ import com.labssoft.roteiro01.enums.TaskType;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(classes = { Roteiro01Application.class }, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class TaskControllerlntegrationTest {
     @BeforeAll
     public static void setup() {
@@ -36,27 +39,42 @@ class TaskControllerlntegrationTest {
 
     @Test
     void givenUrl_whenSuccessOnGetsResponseAndJsonHasRequiredKV_thenCorrect() {
-        get("/api/tasks").then().statusCode(404)
-                .assertThat().body("error", equalTo("Not Found"))
-                .assertThat().body("status", equalTo(404))
-                .assertThat().body("path", equalTo("/api/tasks"));
+        get("/api/task").then().statusCode(200)
+                .assertThat().body("data.size()", equalTo(0));
     }
 
     @Test
     void givenUrl_whenSuccessOnGetsResponseAndJsonHasOneTask_thenCorrect() {
-        get("/api/tasks/1").then().statusCode(404)
-                .assertThat().body("error", equalTo("Not Found"))
-                .assertThat().body("status", equalTo(404))
-                .assertThat().body("path", equalTo("/api/tasks/1"));
+        // Prepare
+        CreateTask task = new CreateTask("New Task", "This is a new task.", TaskType.Free, null, null,
+                TaskPriority.Low);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(task)
+                .when()
+                .post("/api/task")
+                .then()
+                .statusCode(201)
+                .body("statusDescription", equalTo(TaskStatus.InProgress.toString()));
+
+        // Assert
+        get("/api/task/1").then().statusCode(200);
     }
 
     @Test
     void givenTask_whenPostTask_thenCreated() throws JsonProcessingException {
-        CreateTask task = new CreateTask("New Task", "This is a new task.", TaskType.Free, null, null,
+        // Act
+        CreateTask task = new CreateTask("New Task",
+                "This is a new task.",
+                TaskType.Free,
+                null,
+                null,
                 TaskPriority.Low);
         ObjectMapper mapper = new ObjectMapper();
         String jsonTask = mapper.writeValueAsString(task);
 
+        // Act/Assert
         given()
                 .contentType(ContentType.JSON)
                 .body(jsonTask)
@@ -64,13 +82,29 @@ class TaskControllerlntegrationTest {
                 .post("/api/task")
                 .then()
                 .statusCode(201)
+                .body("id", equalTo(1))
                 .body("title", equalTo("New Task"))
-                .body("description", equalTo("This is a new task."));
+                .body("description", equalTo("This is a new task."))
+                .body("type", equalTo(TaskType.Free.toString()))
+                .body("status", equalTo(TaskStatus.InProgress.toString()))
+                .body("statusDescription", equalTo(TaskStatus.InProgress.toString()))
+                .body("priority", equalTo(TaskPriority.Low.toString()));
     }
 
     @Test
     void givenTask_whenDeleteTask_thenOk() {
-        // Assuming a task with ID 1 exists
+        // Prepare
+        CreateTask task = new CreateTask("New Task", "This is a new task.", TaskType.Free, null, null,
+                TaskPriority.Low);
+        given()
+                .contentType(ContentType.JSON)
+                .body(task)
+                .when()
+                .post("/api/task")
+                .then()
+                .statusCode(201);
+
+        // Act/Assert
         delete("/api/task/1")
                 .then()
                 .statusCode(200);
@@ -78,26 +112,50 @@ class TaskControllerlntegrationTest {
 
     @Test
     void givenTask_whenCompleteTask_thenOk() {
-        // Assuming a task with ID 1 exists
-        patch("/api/task/1/done").then().statusCode(200)
-                .body("status", equalTo("DONE"));
+        // Prepare
+        CreateTask task = new CreateTask("New Task", "This is a new task.", TaskType.Free, null, null,
+                TaskPriority.Low);
+        given()
+                .contentType(ContentType.JSON)
+                .body(task)
+                .when()
+                .post("/api/task")
+                .then()
+                .statusCode(201)
+                .body("statusDescription", equalTo(TaskStatus.InProgress.toString()));
+
+        // Act/Assert
+        patch("/api/task/1/done")
+                .then()
+                .statusCode(200)
+                .body("status", equalTo(TaskStatus.Completed.toString()));
     }
 
     @Test
     void givenTask_whenUpdateTask_thenOk() throws JsonProcessingException {
-        UpdateTask task = new UpdateTask("Updated Task", "This is an updated task.", TaskStatus.InProgress);
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonTask = mapper.writeValueAsString(task);
-
+        // Prepare
+        CreateTask task = new CreateTask("New Task", "This is a new task.", TaskType.Free, null, null,
+                TaskPriority.Low);
         given()
                 .contentType(ContentType.JSON)
-                .body(jsonTask)
+                .body(task)
+                .when()
+                .post("/api/task")
+                .then()
+                .statusCode(201);
+        
+        // Act/Assert
+        UpdateTask updateTask = new UpdateTask("Updated Task", "This is an updated task.",  TaskStatus.Completed, TaskPriority.High);
+        given()
+                .contentType(ContentType.JSON)
+                .body(updateTask)
                 .when()
                 .put("/api/task/1")
                 .then()
                 .statusCode(200)
                 .body("title", equalTo("Updated Task"))
                 .body("description", equalTo("This is an updated task."))
-                .body("status", equalTo("IN_PROGRESS"));
+                .body("status", equalTo(TaskStatus.Completed.toString()))
+                .body("priority", equalTo(TaskPriority.High.toString()));
     }
 }
