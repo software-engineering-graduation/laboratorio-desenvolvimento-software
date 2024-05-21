@@ -20,8 +20,11 @@ import java.util.Optional;
 @Service
 public class TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
+
+    public TaskService(@Autowired TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     public Iterable<ReadTask> listAll() {
         return TaskReadMapper.mapToReadTaskList(taskRepository.findAll());
@@ -39,7 +42,6 @@ public class TaskService {
                 validateDueDate(task);
                 return;
             } 
-            
             if (task.getType().equals(TaskType.Period)) {
                 validateDueDays(task);
             }

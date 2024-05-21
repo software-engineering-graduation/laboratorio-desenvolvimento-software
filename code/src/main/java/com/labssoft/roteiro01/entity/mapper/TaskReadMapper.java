@@ -11,6 +11,9 @@ import com.labssoft.roteiro01.enums.TaskType;
 import com.labssoft.roteiro01.util.DateCompare;
 
 public class TaskReadMapper {
+    private TaskReadMapper() {
+    }
+    
     public static ReadTask mapToReadTask(Task task) {
         return new ReadTask(
                 task.getId(),
