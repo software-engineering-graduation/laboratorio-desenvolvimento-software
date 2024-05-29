@@ -1,8 +1,9 @@
-package com.labssoft.roteiro01.entity.dto;
+package com.labssoft.roteiro01.dto;
 
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.labssoft.roteiro01.config.Generated;
 import com.labssoft.roteiro01.enums.TaskPriority;
 import com.labssoft.roteiro01.enums.TaskType;
 
@@ -17,6 +18,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @ToString
+@Generated
 public class CreateTask {
     @Schema(description = "Título da tarefa. ", example = "Tarefa 1", maxLength = 100, minLength = 1)
     @Size(max = 100, min = 1, message = "Título da tarefa deve possuir pelo menos 1 caractere e no máximo 100 caracteres")

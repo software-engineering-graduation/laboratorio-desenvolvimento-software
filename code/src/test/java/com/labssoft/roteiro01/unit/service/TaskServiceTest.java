@@ -8,10 +8,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.labssoft.roteiro01.dto.CreateTask;
+import com.labssoft.roteiro01.dto.ReadTask;
+import com.labssoft.roteiro01.dto.UpdateTask;
 import com.labssoft.roteiro01.entity.Task;
-import com.labssoft.roteiro01.entity.dto.CreateTask;
-import com.labssoft.roteiro01.entity.dto.ReadTask;
-import com.labssoft.roteiro01.entity.dto.UpdateTask;
 import com.labssoft.roteiro01.enums.TaskStatus;
 import com.labssoft.roteiro01.enums.TaskType;
 import com.labssoft.roteiro01.exceptions.InvalidFieldFormatException;
@@ -27,7 +27,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -44,7 +43,7 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("Should retun all tasks")
+    @DisplayName("Should return all tasks")
     void should_list_all_tasks_repository() {
         Iterable<ReadTask> tasks = taskService.listAll();
         assertNotNull(tasks);
@@ -68,6 +67,50 @@ class TaskServiceTest {
         assertEquals(createTask.getType(), createdTask.getType());
         assertEquals(TaskStatus.InProgress, createdTask.getStatus());
         assertEquals("InProgress", createdTask.getStatusDescription());
+        assertEquals(createTask.getPriority(), createdTask.getPriority());
+    }
+
+    @Test
+    @DisplayName("Should successfully create task with type date")
+    void should_create_task_with_type_date() throws InvalidFieldFormatException {
+        // Arrange
+        Mockito.lenient().when(tasksRepository.save(Mockito.any())).thenReturn(TaskMock.newDateTask());
+        CreateTask createTask = TaskMock.newCreateTask();
+        createTask.setType(TaskType.Date);
+        createTask.setDueDate(TaskMock.daysAfterToday(1));
+
+        // Act
+        ReadTask createdTask = taskService.create(createTask);
+
+        // Assert
+        assertNotNull(createdTask);
+        assertEquals(createTask.getTitle(), createdTask.getTitle());
+        assertEquals(createTask.getDescription(), createdTask.getDescription());
+        assertEquals(createTask.getType(), createdTask.getType());
+        assertEquals(TaskStatus.InProgress, createdTask.getStatus());
+        assertEquals("Task is 0 days late", createdTask.getStatusDescription());
+        assertEquals(createTask.getPriority(), createdTask.getPriority());
+    }
+
+    @Test
+    @DisplayName("Should successfully create task with type period")
+    void should_create_task_with_type_period() throws InvalidFieldFormatException {
+        // Arrange
+        Mockito.lenient().when(tasksRepository.save(Mockito.any())).thenReturn(TaskMock.newPeriodTask());
+        CreateTask createTask = TaskMock.newCreateTask();
+        createTask.setType(TaskType.Period);
+        createTask.setDueDays(1);
+
+        // Act
+        ReadTask createdTask = taskService.create(createTask);
+
+        // Assert
+        assertNotNull(createdTask);
+        assertEquals(createTask.getTitle(), createdTask.getTitle());
+        assertEquals(createTask.getDescription(), createdTask.getDescription());
+        assertEquals(createTask.getType(), createdTask.getType());
+        assertEquals(TaskStatus.InProgress, createdTask.getStatus());
+        assertEquals("Task is in InProgress - Days left: 1", createdTask.getStatusDescription());
         assertEquals(createTask.getPriority(), createdTask.getPriority());
     }
 
@@ -168,10 +211,24 @@ class TaskServiceTest {
     @Test
     @DisplayName("Should edit a task")
     void should_edit_task_by_id() {
-        Task task = new Task("Old Title", "Old Description", TaskStatus.InProgress, TaskType.Free, null, null, 1);
-        UpdateTask updateTask = new UpdateTask("New Title", "New Description", TaskStatus.Completed, 1);
-        when(taskRepository.findById(anyLong())).thenReturn(Optional.of(task));
-        when(taskRepository.save(any(Task.class))).thenReturn(task);
+        Task task = new Task(
+                "old Title",
+                "old Description",
+                TaskStatus.InProgress,
+                TaskType.Free,
+                null,
+                0,
+                null
+        );
+        // UpdateTask updateTask = new UpdateTask("New Title", "New Description", TaskStatus.Completed, 1);
+        UpdateTask updateTask = new UpdateTask(
+                "New Title",
+                "New Description",
+                TaskStatus.Completed,
+                null
+        );
+        Mockito.lenient().when(tasksRepository.findById(anyLong())).thenReturn(Optional.of(task));
+        Mockito.lenient().when(tasksRepository.save(any(Task.class))).thenReturn(task);
 
         ReadTask result = taskService.edit(1L, updateTask);
 
@@ -179,6 +236,22 @@ class TaskServiceTest {
         assertEquals("New Title", task.getTitle());
         assertEquals("New Description", task.getDescription());
         assertEquals(TaskStatus.Completed, task.getStatus());
-        verify(taskRepository, times(1)).save(task);
+        verify(tasksRepository, times(1)).save(task);
+    }
+
+    @Test
+    @DisplayName("Should return null when trying to edit non existing task")
+    void should_return_null_when_trying_to_edit_non_existing_task() {
+        Mockito.lenient().when(tasksRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        ReadTask result = taskService.edit(1L, new UpdateTask(
+                "New Title",
+                "New Description",
+                TaskStatus.Completed,
+                null
+        ));
+
+        assertEquals(null, result);
+        verify(tasksRepository, times(0)).save(Mockito.any());
     }
 }

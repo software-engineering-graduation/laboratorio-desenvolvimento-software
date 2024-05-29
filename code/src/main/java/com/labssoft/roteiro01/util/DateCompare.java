@@ -3,7 +3,13 @@ package com.labssoft.roteiro01.util;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.labssoft.roteiro01.config.Generated;
+
 public class DateCompare {
+
+    @Generated
+    private DateCompare() {
+    }
 
     private static Calendar truncateTime(Calendar calendar) {
         calendar.set(Calendar.HOUR_OF_DAY, 0);

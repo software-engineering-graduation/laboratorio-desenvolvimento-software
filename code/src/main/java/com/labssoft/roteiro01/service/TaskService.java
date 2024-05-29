@@ -1,13 +1,13 @@
 package com.labssoft.roteiro01.service;
 
+import com.labssoft.roteiro01.dto.CreateTask;
+import com.labssoft.roteiro01.dto.ReadTask;
+import com.labssoft.roteiro01.dto.UpdateTask;
 import com.labssoft.roteiro01.entity.Task;
-import com.labssoft.roteiro01.entity.dto.CreateTask;
-import com.labssoft.roteiro01.entity.dto.ReadTask;
-import com.labssoft.roteiro01.entity.dto.UpdateTask;
-import com.labssoft.roteiro01.entity.mapper.TaskReadMapper;
 import com.labssoft.roteiro01.enums.TaskStatus;
 import com.labssoft.roteiro01.enums.TaskType;
 import com.labssoft.roteiro01.exceptions.InvalidFieldFormatException;
+import com.labssoft.roteiro01.mapper.TaskReadMapper;
 import com.labssoft.roteiro01.repository.TaskRepository;
 import com.labssoft.roteiro01.util.DateCompare;
 

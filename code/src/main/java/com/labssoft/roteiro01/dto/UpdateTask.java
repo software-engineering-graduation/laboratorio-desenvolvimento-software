@@ -1,10 +1,8 @@
-package com.labssoft.roteiro01.entity.dto;
+package com.labssoft.roteiro01.dto;
 
-import java.util.Date;
-
+import com.labssoft.roteiro01.config.Generated;
 import com.labssoft.roteiro01.enums.TaskPriority;
 import com.labssoft.roteiro01.enums.TaskStatus;
-import com.labssoft.roteiro01.enums.TaskType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -18,6 +16,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @ToString
+@Generated
 public class UpdateTask{
     @Schema(
         description = "Título da tarefa. ", 

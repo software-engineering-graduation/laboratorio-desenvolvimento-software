@@ -1,5 +1,6 @@
-package com.labssoft.roteiro01.entity.dto;
+package com.labssoft.roteiro01.dto;
 
+import com.labssoft.roteiro01.config.Generated;
 import com.labssoft.roteiro01.enums.TaskPriority;
 import com.labssoft.roteiro01.enums.TaskStatus;
 import com.labssoft.roteiro01.enums.TaskType;
@@ -13,6 +14,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @ToString
+@Generated
 public class ReadTask {
     private Long id;
     private String title;

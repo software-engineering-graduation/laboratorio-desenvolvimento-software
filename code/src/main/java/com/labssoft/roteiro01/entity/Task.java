@@ -17,22 +17,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.NonNull;
 
 @Entity
 @Getter
-@Setter
+@lombok.Setter
 @Schema(description = "Todos os detalhes sobre uma tarefa. ")
 @NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Builder
+@lombok.AllArgsConstructor
+@lombok.RequiredArgsConstructor
+@lombok.Builder
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

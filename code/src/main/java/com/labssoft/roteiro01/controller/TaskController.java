@@ -1,8 +1,8 @@
 package com.labssoft.roteiro01.controller;
 
-import com.labssoft.roteiro01.entity.dto.CreateTask;
-import com.labssoft.roteiro01.entity.dto.ReadTask;
-import com.labssoft.roteiro01.entity.dto.UpdateTask;
+import com.labssoft.roteiro01.dto.CreateTask;
+import com.labssoft.roteiro01.dto.ReadTask;
+import com.labssoft.roteiro01.dto.UpdateTask;
 import com.labssoft.roteiro01.exceptions.InvalidFieldFormatException;
 import com.labssoft.roteiro01.service.TaskService;
 
@@ -31,8 +31,11 @@ import org.springframework.http.ResponseEntity;
 @RestController
 public class TaskController {
 
-    @Autowired
     private TaskService taskService;
+
+    public TaskController(@Autowired TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping("/task")
     @Operation(summary = "Lista todas as tarefas da lista")

@@ -1,11 +1,11 @@
-package com.labssoft.roteiro01.entity.mapper;
+package com.labssoft.roteiro01.mapper;
 
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.labssoft.roteiro01.dto.ReadTask;
 import com.labssoft.roteiro01.entity.Task;
-import com.labssoft.roteiro01.entity.dto.ReadTask;
 import com.labssoft.roteiro01.enums.TaskStatus;
 import com.labssoft.roteiro01.enums.TaskType;
 import com.labssoft.roteiro01.util.DateCompare;
@@ -32,7 +32,7 @@ public class TaskReadMapper {
     }
 
     private static String calculateStatusDescription(TaskType type, Date dueDate, Integer dueDays, TaskStatus status) {
-        if (type.equals(TaskType.Free)) {
+        if (type.equals(TaskType.Free) || status.equals(TaskStatus.Completed)) {
             return status.toString();
         }
 
@@ -40,10 +40,6 @@ public class TaskReadMapper {
     }
 
     private static String dateOrPeriodTypeStatusDescription(Date dueDate, TaskStatus status) {
-        if (status.equals(TaskStatus.Completed)) {
-            return status.toString();
-        }
-
         if (DateCompare.isPastDueDate(dueDate)) {
             return new StringBuilder("Task is ")
                     .append(DateCompare.daysPastDueDate(dueDate))
