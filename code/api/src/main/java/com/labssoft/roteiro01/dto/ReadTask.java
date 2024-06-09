@@ -1,5 +1,7 @@
 package com.labssoft.roteiro01.dto;
 
+import java.util.Date;
+
 import com.labssoft.roteiro01.config.Generated;
 import com.labssoft.roteiro01.enums.TaskPriority;
 import com.labssoft.roteiro01.enums.TaskStatus;
@@ -23,4 +25,6 @@ public class ReadTask {
     private TaskStatus status;
     private String statusDescription;
     private TaskPriority priority;
+    private Date dueDate;
+    private Integer dueDays;
 }

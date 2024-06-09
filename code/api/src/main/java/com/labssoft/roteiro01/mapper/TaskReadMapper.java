@@ -22,7 +22,9 @@ public class TaskReadMapper {
                 task.getType(),
                 task.getStatus(),
                 calculateStatusDescription(task.getType(), task.getDueDate(), task.getDueDays(), task.getStatus()),
-                task.getPriority());
+                task.getPriority(),
+                task.getDueDate(),
+                task.getDueDays());
     }
 
     public static List<ReadTask> mapToReadTaskList(List<Task> tasks) {
