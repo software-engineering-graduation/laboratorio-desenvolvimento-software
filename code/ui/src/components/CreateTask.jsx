@@ -32,7 +32,8 @@ export const CreateTask = () => {
           navigate('/')
         }, 1500)
       })
-      .catch(error => setErroMessage(error.response.data.title))
+      .catch(error => setErroMessage(error.response.data.title || error.response.data.errorMessage))
+      .finally(() => setIsLoading(false)) 
   };
 
   const invalidFields = () => {
@@ -118,6 +119,7 @@ export const CreateTask = () => {
               onChange={(e) => setDueDate(e.target.value)}
               className="todo-input"
               placeholder="Data de Vencimento"
+              min={new Date().toISOString().split('T')[0]}
             />
           )}
           {type === "Period" && (
