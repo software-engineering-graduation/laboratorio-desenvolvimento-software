@@ -1,0 +1,51 @@
+@startuml create_task
+
+actor User
+participant Controller as "TaskController"
+participant Service as "TaskService"
+participant Repository as "TaskRepository"
+participant Mapper as "TaskReadMapper"
+
+User -> Controller: POST /task
+Controller -> Service: create(task)
+
+Service -> Service: validateTaskFields(task)
+    
+alt Task is due date type
+    Service -> Service: validateDueDate(task)
+    alt Task due date is before today
+        Service -> Controller: InvalidFieldFormatException
+        Controller -> User: HTTP 400 (Data de vencimento deve ser maior ou igual que a data atual.)
+    else Task due date is valid
+        ref over Service
+            Task Creation
+        end ref
+    end
+else Task is Period type
+    Service -> Service: validateDueDays(task)
+    alt Due days is less than 1
+        Service -> Controller: InvalidFieldFormatException (Dias para vencimento deve ser maior ou igual a 1.)
+        Controller -> User: HTTP 400 
+    else Due days is valid
+        ref over Service
+            Task Creation
+        end ref
+    end
+else Task is Free type
+    ref over Service
+        Task Creation
+    end ref
+end
+
+group Task Creation
+    Service -> Service: createNewTask(task)
+    Service -> Repository: save(newTask)
+    Repository -> Service: Task
+
+    Service -> Mapper: mapToReadTask(savedTask)
+    Mapper -> Service: ReadTask
+    Service -> Controller: ReadTask
+    Controller -> User: HTTP 201 (Task created)
+end
+
+@enduml

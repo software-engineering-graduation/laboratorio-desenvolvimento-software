@@ -1,0 +1,41 @@
+@startuml edit_task
+
+actor User
+participant Controller as "TaskController"
+participant Service as "TaskService"
+participant Repository as "TaskRepository"
+participant Mapper as "TaskReadMapper"
+
+User -> Controller: PUT /task/{id}
+activate Controller
+Controller -> Service: edit(id, updatedTask)
+activate Service
+
+Service -> Repository: findById(id)
+Repository --> Service: Optional<Task>
+
+alt Task found
+    Service -> Service: get Task from Optional
+    Service -> Service: setTitle(updatedTask.getTitle())
+    Service -> Service: setDescription(updatedTask.getDescription())
+    Service -> Service: setStatus(updatedTask.getStatus())
+    Service -> Service: setPriority(updatedTask.getPriority())
+    Service -> Repository: save(task)
+    activate Repository
+    Repository --> Service: Task
+    deactivate Repository
+    Service -> Mapper: mapToReadTask(savedTask)
+    activate Mapper
+    Mapper --> Service: ReadTask
+    deactivate Mapper
+    Service --> Controller: ReadTask
+    Controller --> User: HTTP 200 (Tarefa editada com sucesso)
+else Task not found
+    Service --> Controller: null
+    deactivate Service
+    Controller --> User: HTTP 404 (Tarefa não encontrada)
+end
+
+deactivate Controller
+
+@enduml

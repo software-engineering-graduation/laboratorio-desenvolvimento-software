@@ -1,0 +1,23 @@
+@startuml list_tasks
+
+actor User
+
+participant Controller as "TaskController"
+participant Service as "TaskService"
+participant Repository as "TaskRepository"
+participant Mapper as "TaskReadMapper"
+
+User -> Controller: GET /task
+Controller -> Service: listAll()
+Service -> Repository: findAll()
+Repository -> Service: List<Task>
+Service -> Mapper: mapToReadTaskList(tasks)
+
+Mapper -> Mapper: mapToReadTask(task)
+Mapper -> Mapper: calculateStatusDescription(type, dueDate, dueDays, status)
+Mapper -> Service : List<ReadTask>
+
+Service -> Controller: List<ReadTask>
+Controller -> User: HTTP 200 (List of tasks)
+
+@enduml
