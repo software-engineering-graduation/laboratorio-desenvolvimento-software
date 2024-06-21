@@ -1,18 +1,24 @@
 @startuml component_diagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+
+!include DEVICONS/java.puml
+!include DEVICONS/react.puml
+!include DEVICONS/postgresql.puml
 
 title Diagrama de Componentes To-Do List
 
-Container(client, "Cliente HTTP", " ", "Permite aos usuários acessar o sistema de gerenciamento de tarefas.")
-ContainerDb(db, "Database", "H2", "Armazena os dados das tarefas (título, descrição, status, etc.)")
+Person(user, "Usuário", "Usuário da TODO list que gerencia tarefas")
+ContainerDb(db, "Database", "PostgreSQL", "Armazena os dados das tarefas (título, descrição, status, etc.)", "postgresql")
 
 Container_Boundary(api, "Aplicação de API") {
     Component(tas_controller, "Controller de Tarefas", "Controller MVC Rest", "Gerencia solicitações e respostas HTTP para o gerenciamento de tarefas.")
-    Component(task_service, "Service de Tarefas", " ", "Lógica de negócios para operações CRUD e gerenciamento de tarefas.")
-    Component(task_repository, "Repository de Tarefas", " ", "Fornece operações de persistência para tarefas no banco de dados.")
-    Component(dto_mapper, "Mapper DTO", " ", "Mapeia entre entidades de Tarefa e DTOs para transferência de dados.")
-    Component(date_util, "Util de Data", " ", "Fornece funcionalidades para cálculos de data e lógica de prazos.")
-    Component(exception_handler, "Custom Exceptions", " ", "Manipula exceções e fornece respostas de erro informativas.")
+    Component(task_service, "Service de Tarefas", "", "Lógica de negócios para operações CRUD e gerenciamento de tarefas.")
+    Component(task_repository, "Repository de Tarefas", "", "Fornece operações de persistência para tarefas no banco de dados.")
+    Component(dto_mapper, "Mapper DTO", "", "Mapeia entre entidades de Tarefa e DTOs para transferência de dados.")
+    Component(date_util, "Util de Data", "", "Fornece funcionalidades para cálculos de data e lógica de prazos.")
+    Component(exception_handler, "Custom Exceptions", "", "Manipula exceções e fornece respostas de erro informativas.")
     
     Rel(tas_controller, task_service, "Uses")
     Rel(task_service, task_repository, "Uses")
@@ -21,7 +27,12 @@ Container_Boundary(api, "Aplicação de API") {
     Rel(task_service, exception_handler, "Uses")
 }
 
+Container_Boundary(frontend, "Aplicação Frontend") {
+    Component(react_app, "React App", "", "Interface de usuário para gerenciamento de tarefas.", "react")
+    Rel(react_app, tas_controller, "Uses", "JSON/HTTPS")
+}
+
 Rel(task_repository, db, "Read/Write", "SQL/TCP")
-Rel(client, tas_controller, "Uses", "JSON/HTTPS")
+Rel(user, react_app, "Access", "")
 
 @enduml

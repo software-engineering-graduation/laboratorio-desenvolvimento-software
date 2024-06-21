@@ -3,15 +3,19 @@
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
 
 !include DEVICONS/java.puml
+!include DEVICONS/react.puml
+!include DEVICONS/postgresql.puml
 
 Person(user, "Usuário", "Usuário da TODO list que gerencia tarefas")
 
-System_Boundary(boundary, "TODO list"){
-    Container(api, "REST API", "Java 18, Spring MVC", "", "java")
-    ContainerDb(rel_db, "Banco de dados Relacional", "H2")
+System_Boundary(boundary, "TODO list") {
+    Container(api, "REST API", "Java 18, Spring MVC", "Fornece serviços CRUD para tarefas", "java")
+    ContainerDb(rel_db, "Banco de dados Relacional", "PostgreSQL", "Armazena tarefas", "postgresql")
+    Container(frontend, "React App", "React, JavaScript", "Interface de usuário", "react")
 }
 
-Rel(user, api, "Cria, vizualiza, edita, finaliza e deleta suas tarefas", "HTTPS:8080")
-Rel(api, rel_db, "Reads from and writes to", "SQL/TCP:3306")
+Rel(user, frontend, "Cria, visualiza, edita, finaliza e deleta suas tarefas", "HTTP:3000")
+Rel(frontend, api, "Chama", "HTTP:8080")
+Rel(api, rel_db, "Lê e escreve no", "SQL/TCP:5432")
 
 @enduml
