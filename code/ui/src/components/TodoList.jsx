@@ -19,6 +19,9 @@ export const TodoList = ({ task, deleteTodo, completeTodo }) => {
     return (
       <>
         <span><strong>Dia de vencimento:</strong> {formattedDate}</span>
+        {task.status !== "Completed" &&
+          <span><strong>Status:</strong> {task.statusDescription.split('- ')[1]}</span>
+        }
       </>
     )
   }
@@ -27,6 +30,9 @@ export const TodoList = ({ task, deleteTodo, completeTodo }) => {
     return (
       <>
         <span><strong>Prazo:</strong> {task.dueDays} {task.dueDays > 1 ? 'dias' : 'dia'}</span>
+        {task.status !== "Completed" &&
+          <span><strong>Status:</strong> {task.statusDescription.split('- ')[1]}</span>
+        }
       </>
     )
   }
